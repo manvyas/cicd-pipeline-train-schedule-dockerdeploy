@@ -44,8 +44,6 @@ pipeline {
                 branch 'master'
             }
             steps {
-             input 'Deploy to production?'
-                milestone(1)
                 withCredentials([usernamePassword(credentialsId: 'docker',usernameVariable: 'USERNAME',passwordVariable: 'USERPASS')]){
                     script{
                        sh "sshpass -p $USERPASS -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker pull mydocker15/train:${env.BUILD_NUMBER}\""
