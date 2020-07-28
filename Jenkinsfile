@@ -18,7 +18,7 @@ pipeline {
         }
             steps {
                 script{
-                    app = docker.build("manvyas/train")
+                    app = docker.build("mydocker15/train")
                     app.inside {
                      sh 'echo $(curl localhost:8080)'    
                     }
@@ -48,7 +48,7 @@ pipeline {
                 milestone(1)
                 withCredentials([usernamePassword(credentialsId: 'docker',usernameVariable: 'USERNAME',passwordVariable: 'USERPASS')]){
                     script{
-                       sh "sshpass -p $USERPASS -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker pull manvyas/train:${env.BUILD_NUMBER}\""
+                       sh "sshpass -p $USERPASS -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker pull mydocker15/train:${env.BUILD_NUMBER}\""
                         try{
                           sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker stop train\""
                           sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker rm train\""   
@@ -56,7 +56,7 @@ pipeline {
                         catch(err){
                          echo: 'caught error: $err'   
                         }
-                         sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker run --restart always --name train -p 80:8080 -d manvyas/train:${env.BUILD_NUMBER}\""
+                         sh "sshpass -p '$USERPASS' -v ssh -o StrictHostKeyChecking=no $USERNAME@$prod_ip \"docker run --restart always --name train -p 80:8080 -d mydocker15/train:${env.BUILD_NUMBER}\""
                     }
                 }
             }
